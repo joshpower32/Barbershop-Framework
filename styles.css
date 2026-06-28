@@ -1,0 +1,181 @@
+/* =====================================================================
+   The Barber Co. — Premium Barbershop Framework
+   Modern, clean aesthetic with mobile-first responsive design
+   ===================================================================== */
+
+:root {
+    /* Brand palette — dark + gold luxury barbershop aesthetic */
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --tint: #252525;
+    --ink: #f5f5f5;
+    --muted: #a0a0a0;
+    --line: #333;
+    --brand: #d4a574;           /* warm gold */
+    --brand-dark: #b8860b;
+    --brand-soft: rgba(212, 165, 116, 0.15);
+    --accent: #c0a080;
+
+    /* Type */
+    --font-head: Georgia, "Times New Roman", serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    /* Shape & depth */
+    --radius: 8px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.6);
+    --maxw: 1100px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1.2; color: var(--ink); }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+.muted { color: var(--muted); }
+.eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; color: var(--brand); font-weight: 700; margin: 0 0 .5rem; }
+
+/* ---------- Buttons ---------- */
+.btn { display: inline-block; border: 1px solid transparent; border-radius: 999px; padding: 12px 24px; font: inherit; font-weight: 600; cursor: pointer; transition: all .2s ease; text-align: center; }
+.btn:hover { text-decoration: none; transform: translateY(-2px); }
+.btn-primary { background: var(--brand); color: var(--bg); }
+.btn-primary:hover { background: var(--brand-dark); box-shadow: var(--shadow-md); }
+.btn-ghost { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
+.btn-ghost:hover { background: var(--brand-soft); }
+.btn-block { width: 100%; }
+.btn-sm { padding: 8px 16px; font-size: .9rem; }
+
+/* ---------- Header / Nav ---------- */
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav { display: flex; align-items: center; gap: 18px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 9px; font-family: var(--font-head); font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+.brand:hover { text-decoration: none; }
+.brand-mark { color: var(--brand); font-size: 1.3rem; }
+.nav-links { display: flex; gap: 22px; margin-left: auto; }
+.nav-links a { color: var(--muted); font-weight: 500; font-size: .96rem; transition: color .2s ease; }
+.nav-links a:hover { color: var(--brand); text-decoration: none; }
+.nav-toggle { display: none; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--ink); }
+
+@media (max-width: 768px) {
+    .nav-toggle { display: block; }
+    .nav-links { position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--surface); border-bottom: 1px solid var(--line); max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .nav-links.open { max-height: 300px; padding: 12px 0; }
+    .nav-links a { display: block; padding: 12px 20px; color: var(--muted); }
+    .nav-links a:hover { background: var(--tint); }
+}
+
+/* ---------- Hero ---------- */
+.hero { position: relative; padding: 100px 0 60px; overflow: hidden; }
+.hero-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); z-index: 0; }
+.hero-inner { position: relative; z-index: 1; max-width: 700px; }
+.hero h1 { font-size: clamp(1.8rem, 6vw, 3rem); margin: 0 0 .8rem; color: var(--ink); }
+.hero .lede { font-size: 1.1rem; color: var(--muted); margin: 0 0 1.8rem; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 768px) {
+    .hero { padding: 60px 0 40px; }
+    .hero h1 { font-size: 1.8rem; }
+    .hero-actions { flex-direction: column; gap: 10px; }
+    .btn { width: 100%; }
+}
+
+/* ---------- Sections ---------- */
+.section { padding: 80px 0; }
+.section-head { text-align: center; margin-bottom: 50px; }
+.section-head h2 { font-size: 2.2rem; margin: 0 0 .5rem; }
+.section-head p { font-size: 1.1rem; color: var(--muted); margin: 0; }
+.section-dark { background: var(--surface); }
+.section-dark .light { color: var(--ink); }
+.section-tint { background: var(--tint); }
+
+@media (max-width: 768px) {
+    .section { padding: 50px 0; }
+    .section-head h2 { font-size: 1.6rem; }
+}
+
+/* ---------- Gallery ---------- */
+.gallery-container { position: relative; margin: 0 auto; max-width: 900px; }
+.gallery-viewport { overflow: hidden; border-radius: var(--radius); }
+.gallery-grid { display: flex; gap: 0; transition: transform .4s ease; }
+.gallery-grid img { width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius); display: block; }
+.gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: var(--brand); border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: all .2s ease; z-index: 10; display: flex; align-items: center; justify-content: center; }
+.gallery-arrow:hover { background: rgba(0, 0, 0, 0.8); transform: translateY(-50%) scale(1.1); }
+.gallery-prev { left: -60px; }
+.gallery-next { right: -60px; }
+.gallery-dots { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
+.gallery-dots button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1px solid var(--brand); background: transparent; cursor: pointer; transition: all .2s ease; }
+.gallery-dots button.active { background: var(--brand); width: 28px; border-radius: 5px; }
+
+@media (max-width: 768px) {
+    .gallery-arrow { width: 40px; height: 40px; font-size: 1.2rem; }
+    .gallery-prev { left: 10px; }
+    .gallery-next { right: 10px; }
+    .gallery-grid img { height: 300px; }
+}
+
+/* ---------- Services ---------- */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.service-card { background: var(--tint); padding: 30px; border-radius: var(--radius); text-align: center; border: 1px solid var(--line); transition: all .2s ease; }
+.service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--brand); }
+.service-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.service-card h3 { margin: 12px 0 8px; font-size: 1.1rem; }
+.service-card .price { color: var(--brand); font-weight: 700; font-size: 1.3rem; margin: 8px 0; }
+.service-card p { color: var(--muted); font-size: .95rem; margin: 8px 0 0; }
+
+/* ---------- Barbers ---------- */
+.barbers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.barber-card { text-align: center; }
+.barber-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); margin-bottom: 16px; border: 2px solid var(--brand-soft); }
+.barber-card h3 { margin: 12px 0 4px; }
+.barber-card p { color: var(--muted); font-size: .95rem; margin: 0; }
+
+/* ---------- Booking Form ---------- */
+.booking-form { max-width: 600px; margin: 0 auto; background: var(--surface); padding: 40px; border-radius: var(--radius); border: 1px solid var(--line); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--ink); }
+.form-group input,
+.form-group select,
+.form-group textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); font-family: inherit; font-size: .95rem; transition: border-color .2s ease; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.form-note { text-align: center; font-size: .9rem; color: var(--muted); margin-top: 12px; }
+
+@media (max-width: 768px) {
+    .booking-form { padding: 24px; }
+}
+
+/* ---------- Contact Grid ---------- */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+.contact-card { background: var(--bg); padding: 24px; border-radius: var(--radius); border: 1px solid var(--line); }
+.contact-card h3 { margin: 0 0 12px; color: var(--brand); }
+.contact-card p { color: var(--muted); margin: 0; line-height: 1.8; }
+
+/* ---------- Toast ---------- */
+.toast { position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 400px; background: var(--surface); color: var(--ink); padding: 16px 20px; border-radius: var(--radius); border-left: 4px solid var(--brand); box-shadow: var(--shadow-md); transform: translateY(200px); transition: transform .3s ease; z-index: 100; }
+.toast.show { transform: translateY(0); }
+
+@media (max-width: 768px) {
+    .toast { left: 12px; right: 12px; bottom: 12px; }
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 480px) {
+    .wrap { padding: 0 16px; }
+    .section { padding: 40px 0; }
+    .gallery-grid img { height: 250px; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.4rem; }
+    .service-card, .barber-card { margin: 0; }
+}
