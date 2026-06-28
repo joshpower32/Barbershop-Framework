@@ -171,6 +171,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
     .toast { left: 12px; right: 12px; bottom: 12px; }
 }
 
+/* ---------- Footer ---------- */
+.footer { background: var(--surface); border-top: 1px solid var(--line); padding: 40px 0; margin-top: 80px; }
+.footer-content { text-align: center; }
+.footer-content p { margin: 8px 0; color: var(--muted); font-size: .9rem; }
+.footer-credits { color: #888; font-size: .85rem; }
+.footer-credits a { color: #888; text-decoration: none; }
+.footer-credits a:hover { color: var(--brand); }
+
 /* ---------- Responsive tweaks ---------- */
 @media (max-width: 480px) {
     .wrap { padding: 0 16px; }
