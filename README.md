@@ -25,7 +25,7 @@ Modern dark aesthetic inspired by contemporary barbershop design, with warm gold
    - Phone number and email
 3. **Services** — edit the services grid in `index.html` with actual services and pricing.
 4. **Barbers** — edit the `BARBERS` array in `app.js` (name, title, bio, portrait photo query for Pexels).
-5. **Gallery photos** — currently loads from Pexels using generic queries. For real photos, edit `CONFIG.galleryQueries` in `app.js` to match your shop's style, or provide local image paths (e.g., `assets/fade-1.jpg`).
+5. **Gallery photos** — pinned Pexels shots by default. Swap URLs in the `PEXELS_PHOTOS` map in `app.js`, or use local image paths (e.g., `assets/fade-1.jpg`) for the client's real photos.
 
 ## Local preview
 
@@ -54,10 +54,9 @@ Free tier = 250 submissions/month per key.
 
 ## Notes
 
-- Gallery photos are auto-fetched from Pexels on page load and cached in `localStorage`.
-- Barber profile photos are also loaded from Pexels; customize the `query` field in `BARBERS` for each barber.
+- Gallery and barber photos are pinned Pexels images — direct URLs in the `PEXELS_PHOTOS` map in `app.js`, so they load instantly with no API key or runtime fetching.
+- To change a photo, paste a new pexels.com image address into the map, or give a barber an `image:` path for a real photo.
 - This template works best for local barbershops, personal grooming services, and salons.
-- All API keys (Pexels) are demo keys; clients should get their own at [pexels.com/api](https://www.pexels.com/api/).
 
 ## Selling this template
 

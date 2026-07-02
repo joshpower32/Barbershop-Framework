@@ -4,11 +4,10 @@
    ===================================================================== */
 
 const CONFIG = {
-  pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
   galleryQueries: ["barbershop haircut", "barber fade", "haircut style", "barber shop", "mens haircut", "barber grooming"],
   heroBgQuery: "modern barbershop",
   web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
-  ownerEmail: "hello@thebarberc o.ca",
+  ownerEmail: "hello@thebarberco.ca",
   businessName: "The Barber Co.",
 };
 
@@ -18,43 +17,39 @@ const BARBERS = [
   { id: "james", name: "James", title: "Barber", bio: "Creative with modern styles and beard design.", query: "man portrait styled" },
 ];
 
+// --- Demo photos: pinned Pexels shots, keyed by query -------------------
+// Direct image URLs load with the page — no API call, no key, no pop-in.
+// To change a photo: browse pexels.com, copy the image address, paste here.
+const PEXELS_PHOTOS = {
+  "modern barbershop": { u: "https://images.pexels.com/photos/7518739/pexels-photo-7518739.jpeg", p: "Pavel Danilyuk" },
+  "barbershop haircut": { u: "https://images.pexels.com/photos/7447152/pexels-photo-7447152.jpeg", p: "Gustavo Fring" },
+  "barber fade": { u: "https://images.pexels.com/photos/34702982/pexels-photo-34702982.jpeg", p: "Daniel Cosma" },
+  "haircut style": { u: "https://images.pexels.com/photos/37533244/pexels-photo-37533244.jpeg", p: "Gizem toprak" },
+  "barber shop": { u: "https://images.pexels.com/photos/37764947/pexels-photo-37764947.jpeg", p: "wal_ 172619" },
+  "mens haircut": { u: "https://images.pexels.com/photos/12464843/pexels-photo-12464843.jpeg", p: "izzet çakallı" },
+  "barber grooming": { u: "https://images.pexels.com/photos/7697443/pexels-photo-7697443.jpeg", p: "RDNE Stock project" },
+  "man portrait beard": { u: "https://images.pexels.com/photos/10935029/pexels-photo-10935029.jpeg", p: "R. Fera" },
+  "man portrait professional": { u: "https://images.pexels.com/photos/26820703/pexels-photo-26820703.jpeg", p: "Wanas Rosa" },
+  "man portrait styled": { u: "https://images.pexels.com/photos/33280219/pexels-photo-33280219.jpeg", p: "Mohammad Gharib" },
+};
+// Size an image via Pexels CDN params (w = width; pxCrop also crops to w×h)
+const px = (u, w) => `${u}?auto=compress&cs=tinysrgb&w=${w}`;
+const pxCrop = (u, w, h) => `${u}?auto=compress&cs=tinysrgb&fit=crop&w=${w}&h=${h}`;
+
 const $ = (id) => document.getElementById(id);
 const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 // --- Gallery state and control ---
-let galleryPhotos = [];
+// Gallery photos come straight from the pinned PEXELS_PHOTOS map — instant.
+const galleryPhotos = CONFIG.galleryQueries
+  .map((q) => PEXELS_PHOTOS[q])
+  .filter(Boolean)
+  .map((ph) => pxCrop(ph.u, 1200, 627));
 let currentGalleryIndex = 0;
-const IMG_CACHE_KEY = "barbershop_imgcache";
-let imgCache = JSON.parse(localStorage.getItem(IMG_CACHE_KEY) || "{}");
-
-// Fetch gallery images from Pexels
-async function loadGalleryImages() {
-  const queries = CONFIG.galleryQueries;
-  let allPhotos = [];
-
-  try {
-    for (let i = 0; i < queries.length; i++) {
-      const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(queries[i])}&per_page=1&orientation=landscape`,
-        { headers: { Authorization: CONFIG.pexelsKey } }
-      );
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (data.photos && data.photos.length > 0) {
-        allPhotos.push(data.photos[0]);
-      }
-    }
-    galleryPhotos = allPhotos;
-    renderGallery();
-    renderGalleryDots();
-  } catch (_) {
-    $("galleryGrid").innerHTML = "<p style='grid-column:1/-1;text-align:center;color:#a0a0a0;padding:40px;'>Unable to load gallery. Check your API key.</p>";
-  }
-}
 
 function renderGallery() {
   const grid = $("galleryGrid");
-  grid.innerHTML = galleryPhotos.map((p, i) => `<img src="${esc(p.src.landscape)}" alt="Haircut ${i + 1}" loading="lazy">`).join("");
+  grid.innerHTML = galleryPhotos.map((url, i) => `<img src="${esc(url)}" alt="Haircut example ${i + 1}" ${i === 0 ? "" : 'loading="lazy"'}>`).join("");
   updateGalleryScroll();
 }
 
@@ -99,31 +94,12 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// --- Load barber profiles ---
-async function loadBarberImages() {
-  for (const barber of BARBERS) {
-    const cached = imgCache[barber.id]?.url;
-    if (cached) continue;
-    try {
-      const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(barber.query)}&per_page=1&orientation=portrait`,
-        { headers: { Authorization: CONFIG.pexelsKey } }
-      );
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (data.photos && data.photos.length > 0) {
-        imgCache[barber.id] = { url: data.photos[0].src.medium };
-        localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      }
-    } catch (_) {}
-  }
-  renderBarbers();
-}
-
+// --- Barber profiles ---
 function renderBarbers() {
   const grid = $("barbersGrid");
   grid.innerHTML = BARBERS.map((b) => {
-    const img = imgCache[b.id]?.url || null;
+    const ph = PEXELS_PHOTOS[b.query];
+    const img = b.image || (ph ? px(ph.u, 500) : null);
     return `
       <div class="barber-card">
         ${img ? `<img src="${esc(img)}" alt="${esc(b.name)}" class="barber-img" loading="lazy">` : `<div class="barber-img" style="background:#333;display:flex;align-items:center;justify-content:center;"><span style="font-size:2rem;color:#666;">✂</span></div>`}
@@ -218,29 +194,14 @@ function toast(msg) {
   }, 3500);
 }
 
-// --- Load hero background ---
-async function loadHeroBg() {
-  const el = $("heroBg");
-  const cacheKey = "__hero";
-  const cached = imgCache[cacheKey]?.url;
-  if (cached) { el.style.backgroundImage = `url("${cached}")`; return; }
-  try {
-    const res = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(CONFIG.heroBgQuery)}&per_page=1&orientation=landscape`,
-      { headers: { Authorization: CONFIG.pexelsKey } }
-    );
-    if (!res.ok) return;
-    const data = await res.json();
-    if (data.photos && data.photos.length > 0) {
-      const url = data.photos[0].src.landscape;
-      imgCache[cacheKey] = { url };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      el.style.backgroundImage = `url("${url}")`;
-    }
-  } catch (_) {}
+// --- Hero background ---
+function loadHeroBg() {
+  const ph = PEXELS_PHOTOS[CONFIG.heroBgQuery];
+  if (ph) $("heroBg").style.backgroundImage = `url("${px(ph.u, 1600)}")`;
 }
 
 // --- Init ---
-loadGalleryImages();
-loadBarberImages();
+renderGallery();
+renderGalleryDots();
+renderBarbers();
 loadHeroBg();
